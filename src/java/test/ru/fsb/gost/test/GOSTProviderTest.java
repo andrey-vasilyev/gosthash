@@ -33,23 +33,23 @@ public class GOSTProviderTest {
             (byte)0xe8, (byte)0xf0, (byte)0xf2, (byte)0xe5, (byte)0xe2, (byte)0x20, (byte)0xe5, (byte)0xd1
     };
 
-    public final String A1_512 =
+    private final String A1_512 =
             "486f64c1917879417fef082b3381a4e2" +
             "11c324f074654c38823a7b76f830ad00" +
             "fa1fbae42b1285c0352f227524bc9ab1" +
             "6254288dd6863dccd5b9f54a1ad0541b";
 
-    public final String A2_512 =
+    private final String A2_512 =
             "28fbc9bada033b1460642bdcddb90c3f" +
             "b3e56c497ccd0f62b8a2ad4935e85f03" +
             "7613966de4ee00531ae60f3b5a47f8da" +
             "e06915d5f2f194996fcabf2622e6881e";
 
-    public final String A1_256 =
+    private final String A1_256 =
             "00557be5e584fd52a449b16b0251d05d" +
             "27f94ab76cbaa6da890b59d8ef1e159d";
 
-    public final String A2_256 =
+    private final String A2_256 =
             "508f7e553c06501d749a66fc28c6cac0" +
             "b005746d97537fa85d9e40904efed29d";
 
@@ -60,10 +60,10 @@ public class GOSTProviderTest {
         }
     }
 
-    public static String bytesToHexStr(byte[] bytes) {
+    private static String bytesToHexStr(byte[] bytes) {
         String res = "";
-        for (int i = 0; i < bytes.length; ++i ) {
-            res += String.format("%02x", bytes[i]);
+        for (byte aByte : bytes) {
+            res += String.format("%02x", aByte);
         }
         return res;
     }

@@ -77,7 +77,7 @@ public class GOSTDigest extends MessageDigestSpi {
 
     private void L(byte[] V) {
         for(int i = 0; i < V.length; i += 8) {
-            long acc = 0, res = 0;
+            long acc = 0;
             long l = ((V[i + 0] & 0xFFL) << 56) |
                      ((V[i + 1] & 0xFFL) << 48) |
                      ((V[i + 2] & 0xFFL) << 40) |
@@ -152,7 +152,7 @@ public class GOSTDigest extends MessageDigestSpi {
         return h;
     }
 
-    public static void addMod512(byte[] A, int num) {
+    private static void addMod512(byte[] A, int num) {
         int tmp = ((A[62] & 0xFF) << 8) | (A[63] & 0xFF);
         tmp += num;
         if (tmp > 0xFFFF) {
@@ -169,7 +169,7 @@ public class GOSTDigest extends MessageDigestSpi {
         A[62] = (byte)(tmp >>> 8);
     }
 
-    public static void addMod512(byte[] A, byte[] B) {
+    private static void addMod512(byte[] A, byte[] B) {
         boolean overflow = false;
 
         for (int i = A.length - 1; i >= 0; --i) {
@@ -191,7 +191,7 @@ public class GOSTDigest extends MessageDigestSpi {
         }
     }
 
-    private byte[] Pi = {
+    private final byte[] Pi = {
         (byte)0xFC, (byte)0xEE, (byte)0xDD, (byte)0x11, (byte)0xCF, (byte)0x6E, (byte)0x31, (byte)0x16,
         (byte)0xFB, (byte)0xC4, (byte)0xFA, (byte)0xDA, (byte)0x23, (byte)0xC5, (byte)0x04, (byte)0x4D,
         (byte)0xE9, (byte)0x77, (byte)0xF0, (byte)0xDB, (byte)0x93, (byte)0x2E, (byte)0x99, (byte)0xBA,
@@ -226,7 +226,7 @@ public class GOSTDigest extends MessageDigestSpi {
         (byte)0xD1, (byte)0x66, (byte)0xAF, (byte)0xC2, (byte)0x39, (byte)0x4B, (byte)0x63, (byte)0xB6
     };
 
-    private byte[] Tau = {
+    private final byte[] Tau = {
         0,  8, 16, 24, 32, 40, 48, 56,
         1,  9, 17, 25, 33, 41, 49, 57,
         2, 10, 18, 26, 34, 42, 50, 58,
@@ -237,7 +237,7 @@ public class GOSTDigest extends MessageDigestSpi {
         7, 15, 23, 31, 39, 47, 55, 63
     };
 
-    private long[] A = {
+    private final long[] A = {
             0x8e20faa72ba0b470L, 0x47107ddd9b505a38L, 0xad08b0e0c3282d1cL, 0xd8045870ef14980eL,
             0x6c022c38f90a4c07L, 0x3601161cf205268dL, 0x1b8e0b0e798c13c8L, 0x83478b07b2468764L,
             0xa011d380818e8f40L, 0x5086e740ce47c920L, 0x2843fd2067adea10L, 0x14aff010bdd87508L,
@@ -256,7 +256,7 @@ public class GOSTDigest extends MessageDigestSpi {
             0x07e095624504536cL, 0x8d70c431ac02a736L, 0xc83862965601dd1bL, 0x641c314b2b8ee083L
     };
 
-    private byte[][] C = {{
+    private final byte[][] C = {{
             (byte)0xb1, (byte)0x08, (byte)0x5b, (byte)0xda, (byte)0x1e, (byte)0xca, (byte)0xda, (byte)0xe9,
             (byte)0xeb, (byte)0xcb, (byte)0x2f, (byte)0x81, (byte)0xc0, (byte)0x65, (byte)0x7c, (byte)0x1f,
             (byte)0x2f, (byte)0x6a, (byte)0x76, (byte)0x43, (byte)0x2e, (byte)0x45, (byte)0xd0, (byte)0x16,
@@ -366,7 +366,7 @@ public class GOSTDigest extends MessageDigestSpi {
             (byte)0x48, (byte)0xbc, (byte)0x92, (byte)0x4a, (byte)0xf1, (byte)0x1b, (byte)0xd7, (byte)0x20}
     };
 
-    private byte[] Zero = {
+    private final byte[] Zero = {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

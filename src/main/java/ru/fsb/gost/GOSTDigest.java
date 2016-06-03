@@ -9,6 +9,7 @@ public class GOSTDigest extends MessageDigestSpi {
     private final byte[] IV;
     private byte[] N = new byte[64];
     private byte[] Sigma = new byte[64];
+    private byte[][] Ki = new byte[13][64];
     private ByteArrayOutputStream baosM = new ByteArrayOutputStream();
 
     public GOSTDigest(byte[] IV) {
@@ -78,14 +79,14 @@ public class GOSTDigest extends MessageDigestSpi {
     private void L(byte[] V) {
         for(int i = 0; i < V.length; i += 8) {
             long acc = 0;
-            long l = ((V[i + 0] & 0xFFL) << 56) |
+            long l = ((V[i    ] & 0xFFL) << 56) |
                      ((V[i + 1] & 0xFFL) << 48) |
                      ((V[i + 2] & 0xFFL) << 40) |
                      ((V[i + 3] & 0xFFL) << 32) |
                      ((V[i + 4] & 0xFFL) << 24) |
                      ((V[i + 5] & 0xFFL) << 16) |
                      ((V[i + 6] & 0xFFL) <<  8) |
-                     ((V[i + 7] & 0xFFL) <<  0) ;
+                     ((V[i + 7] & 0xFFL)      ) ;
 
             for(int j = 0; j < 64; ++j) {
                 if ((l & (1L << (63 - j))) != 0) {
@@ -93,14 +94,14 @@ public class GOSTDigest extends MessageDigestSpi {
                 }
             }
 
-            V[i + 0] = (byte)((acc >>> 56) & 0xFF);
-            V[i + 1] = (byte)((acc >>> 48) & 0xFF);
-            V[i + 2] = (byte)((acc >>> 40) & 0xFF);
-            V[i + 3] = (byte)((acc >>> 32) & 0xFF);
-            V[i + 4] = (byte)((acc >>> 24) & 0xFF);
-            V[i + 5] = (byte)((acc >>> 16) & 0xFF);
-            V[i + 6] = (byte)((acc >>>  8) & 0xFF);
-            V[i + 7] = (byte)((acc >>>  0) & 0xFF);
+            V[i    ] = (byte)(acc >> 56);
+            V[i + 1] = (byte)(acc >> 48);
+            V[i + 2] = (byte)(acc >> 40);
+            V[i + 3] = (byte)(acc >> 32);
+            V[i + 4] = (byte)(acc >> 24);
+            V[i + 5] = (byte)(acc >> 16);
+            V[i + 6] = (byte)(acc >>  8);
+            V[i + 7] = (byte)(acc      );
         }
     }
 
@@ -111,8 +112,7 @@ public class GOSTDigest extends MessageDigestSpi {
     }
 
     private byte[] E(byte[] K, byte[] m) {
-        byte[][] Ki = new byte[13][64];
-        Ki[0] = K;
+        System.arraycopy(K, 0, Ki[0], 0, 64);
         for (int i = 1; i < 13; ++i) {
             System.arraycopy(Ki[i - 1], 0, Ki[i], 0, 64);
             xor512(Ki[i], C[i - 1]);
@@ -153,40 +153,22 @@ public class GOSTDigest extends MessageDigestSpi {
     }
 
     private static void addMod512(byte[] A, int num) {
-        int tmp = ((A[62] & 0xFF) << 8) | (A[63] & 0xFF);
-        tmp += num;
-        if (tmp > 0xFFFF) {
-            boolean overflow = true;
-            for (int i = 61; (i >= 0) && overflow; --i) {
-                if (A[i] != -1) {
-                    overflow = false;
-                }
-                ++A[i];
-            }
-            tmp -= 0x10000;
+        int c;
+        c = (A[63] & 0xFF) + ((byte)num & 0xFF);
+        A[63] = (byte)c;
+
+        c = (A[62] & 0xFF) + ((byte)(num >> 8) & 0xFF) + (c >> 8);
+        A[62] = (byte)c;
+
+        for (int i = 61; (i >= 0) && (c > 0); --i) {
+            c = (A[i] & 0xFF) + (c >> 8);
+            A[i] = (byte)c;
         }
-        A[63] = (byte)tmp;
-        A[62] = (byte)(tmp >>> 8);
     }
 
     private static void addMod512(byte[] A, byte[] B) {
-        boolean overflow = false;
-
-        for (int i = A.length - 1; i >= 0; --i) {
-            if (overflow) {
-                if (A[i] != -1) {
-                    overflow = false;
-                }
-                ++A[i];
-            }
-
-            short c = (short)((A[i] & 0xFF) + (B[i] & 0xFF));
-
-            if (c > 0xFF) {
-                c -= 0x100;
-                overflow = true;
-            }
-
+        for (int c = 0, i = A.length - 1; i >= 0; --i) {
+            c = (A[i] & 0xFF) + (B[i] & 0xFF) + (c >> 8);
             A[i] = (byte)c;
         }
     }

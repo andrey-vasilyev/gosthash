@@ -44,9 +44,17 @@ public class Main {
 To build and run [JMH](http://openjdk.java.net/projects/code-tools/jmh/) benchmark:
 
     gradle jmhJar
-    java -jar build/libs/gosthash-0.2-jmh.jar -wi 5 -i 5 -f 1 -jvmArgs '-server -XX:+AggressiveOpts'
+    java -jar build/libs/gosthash-0.3-jmh.jar -wi 5 -i 5 -f 1 -jvmArgs '-server -XX:+AggressiveOpts'
 
-Here is a sample result taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU:
+Here are some results taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU and openjdk 1.8.0_91:
 
-    Benchmark                Mode  Cnt  Score   Error  Units
-    GOSTBenchmark.bench512  thrpt    5  0.101 ± 0.001  ops/s
+| Unoptimized | Optimized |
+| ----------- | --------- |
+|    0.101    |   1.259   |
+
+The result is given in operations per second i.e. the number of times benchmark function is executed per second i.e. more is better.
+
+#Credit
+
+For table optimization, which dramatically (12x) improves performance, credit goes to [Oleksandr Kazymyrov](https://github.com/okazymyrov/stribog).
+Some clarifications on how this optimization works are given in section 3 of his [paper](https://okazymyrov.github.io/assets/attachments/articles/2013/6795e47b49068629cbcb2d323faafa.pdf)

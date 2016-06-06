@@ -16,18 +16,37 @@ At the moment there are some limitations:
 Here is a simple usage example to get 512-bit digest of "Hello, World!" string:
 
 ```java
-import java.security.Security;
 import ru.fsb.gost.GOSTProvider;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.util.Arrays;
 
-if (Security.getProvider("GOST") == null) {
-    Security.addProvider(new GOSTProvider());
-}
+public class Main {
+    public static void main(String[] args) {
+        if (Security.getProvider("GOST") == null) {
+            Security.addProvider(new GOSTProvider());
+        }
 
-try {
-    MessageDigest md = MessageDigest.getInstance("GOST3411-2012.512");
-    byte[] result = md.digest("Hello, World!".getBytes());
-} catch (NoSuchAlgorithmException e) {
-    System.out.println(e.getMessage());
+        try {
+            MessageDigest md = MessageDigest.getInstance("GOST3411-2012.512");
+            byte[] result = md.digest("Hello, World!".getBytes());
+            System.out.println(Arrays.toString(result));
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
+```
+
+#Benchmark
+
+To build and run [JMH](http://openjdk.java.net/projects/code-tools/jmh/) benchmark:
+
+    gradle jmhJar
+    java -jar build/libs/gosthash-0.2-jmh.jar -wi 5 -i 5 -f 1 -jvmArgs '-server -XX:+AggressiveOpts'
+
+Here is a sample result taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU:
+
+    Benchmark                Mode  Cnt  Score   Error  Units
+    GOSTBenchmark.bench512  thrpt    5  0.101 ± 0.001  ops/s

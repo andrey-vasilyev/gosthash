@@ -7,12 +7,12 @@ import java.util.Arrays;
 public class GOSTDigest extends MessageDigestSpi {
 
     private final byte[] IV;
-    private byte[] N = new byte[64];
-    private byte[] Sigma = new byte[64];
-    private byte[][] Ki = new byte[13][64];
-    private ByteArrayOutputStream baosM = new ByteArrayOutputStream();
+    private final byte[] N = new byte[64];
+    private final byte[] Sigma = new byte[64];
+    private final byte[][] Ki = new byte[13][64];
+    private final ByteArrayOutputStream baosM = new ByteArrayOutputStream();
 
-    public GOSTDigest(byte[] IV) {
+    GOSTDigest(byte[] IV) {
         this.IV = IV;
     }
 

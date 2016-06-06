@@ -1,6 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'me.champeau.gradle:jmh-gradle-plugin:0.2.0'
+    }
+}
+
+apply plugin: 'me.champeau.gradle.jmh'
 apply plugin: 'java'
 
-version = '0.1'
+version = '0.2'
 
 repositories {
     mavenCentral()
@@ -8,4 +19,8 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+jmh {
+    jmhVersion = '1.12'
 }

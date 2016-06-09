@@ -48,11 +48,11 @@ To build and run [JMH](http://openjdk.java.net/projects/code-tools/jmh/) benchma
 
 Here are some results taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU and openjdk 1.8.0_91:
 
-| Unoptimized | Optimized |
-| ----------- | --------- |
-|    0.101    |   1.259   |
+| Unoptimized | Optimized | Optimized + Unrolled |
+| ----------- | --------- | -------------------- |
+|    0.101    |   1.259   |         1.704        |
 
-The result is given in operations per second i.e. the number of times benchmark function is executed per second i.e. more is better.
+The results are given in operations per second i.e. the number of times benchmark function is executed per second (more is better).
 
 #Credit
 

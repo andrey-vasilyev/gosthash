@@ -66,35 +66,178 @@ public class GOSTDigest extends MessageDigestSpi {
         long[] res = new long[8];
         long r;
 
-        for (int i = 0; i < 8; ++i) {
-            r = 0;
-            r ^= T[0][(V[56 + i] & 0xFF)];
-            r ^= T[1][(V[48 + i] & 0xFF)];
-            r ^= T[2][(V[40 + i] & 0xFF)];
-            r ^= T[3][(V[32 + i] & 0xFF)];
-            r ^= T[4][(V[24 + i] & 0xFF)];
-            r ^= T[5][(V[16 + i] & 0xFF)];
-            r ^= T[6][(V[ 8 + i] & 0xFF)];
-            r ^= T[7][(V[     i] & 0xFF)];
-            res[i] = r;
-        }
+        r = 0;
+        r ^= T[0][(V[56] & 0xFF)];
+        r ^= T[1][(V[48] & 0xFF)];
+        r ^= T[2][(V[40] & 0xFF)];
+        r ^= T[3][(V[32] & 0xFF)];
+        r ^= T[4][(V[24] & 0xFF)];
+        r ^= T[5][(V[16] & 0xFF)];
+        r ^= T[6][(V[ 8] & 0xFF)];
+        r ^= T[7][(V[ 0] & 0xFF)];
+        res[0] = r;
 
-        for (int i = 0; i < 8; ++i) {
-            r = res[i];
-            V[i * 8 + 7] = (byte)(r >> 56);
-            V[i * 8 + 6] = (byte)(r >> 48);
-            V[i * 8 + 5] = (byte)(r >> 40);
-            V[i * 8 + 4] = (byte)(r >> 32);
-            V[i * 8 + 3] = (byte)(r >> 24);
-            V[i * 8 + 2] = (byte)(r >> 16);
-            V[i * 8 + 1] = (byte)(r >>  8);
-            V[i * 8    ] = (byte)(r      );
-        }
+        r = 0;
+        r ^= T[0][(V[57] & 0xFF)];
+        r ^= T[1][(V[49] & 0xFF)];
+        r ^= T[2][(V[41] & 0xFF)];
+        r ^= T[3][(V[33] & 0xFF)];
+        r ^= T[4][(V[25] & 0xFF)];
+        r ^= T[5][(V[17] & 0xFF)];
+        r ^= T[6][(V[ 9] & 0xFF)];
+        r ^= T[7][(V[ 1] & 0xFF)];
+        res[1] = r;
+
+        r = 0;
+        r ^= T[0][(V[58] & 0xFF)];
+        r ^= T[1][(V[50] & 0xFF)];
+        r ^= T[2][(V[42] & 0xFF)];
+        r ^= T[3][(V[34] & 0xFF)];
+        r ^= T[4][(V[26] & 0xFF)];
+        r ^= T[5][(V[18] & 0xFF)];
+        r ^= T[6][(V[10] & 0xFF)];
+        r ^= T[7][(V[ 2] & 0xFF)];
+        res[2] = r;
+
+        r = 0;
+        r ^= T[0][(V[59] & 0xFF)];
+        r ^= T[1][(V[51] & 0xFF)];
+        r ^= T[2][(V[43] & 0xFF)];
+        r ^= T[3][(V[35] & 0xFF)];
+        r ^= T[4][(V[27] & 0xFF)];
+        r ^= T[5][(V[19] & 0xFF)];
+        r ^= T[6][(V[11] & 0xFF)];
+        r ^= T[7][(V[ 3] & 0xFF)];
+        res[3] = r;
+
+        r = 0;
+        r ^= T[0][(V[60] & 0xFF)];
+        r ^= T[1][(V[52] & 0xFF)];
+        r ^= T[2][(V[44] & 0xFF)];
+        r ^= T[3][(V[36] & 0xFF)];
+        r ^= T[4][(V[28] & 0xFF)];
+        r ^= T[5][(V[20] & 0xFF)];
+        r ^= T[6][(V[12] & 0xFF)];
+        r ^= T[7][(V[ 4] & 0xFF)];
+        res[4] = r;
+
+        r = 0;
+        r ^= T[0][(V[61] & 0xFF)];
+        r ^= T[1][(V[53] & 0xFF)];
+        r ^= T[2][(V[45] & 0xFF)];
+        r ^= T[3][(V[37] & 0xFF)];
+        r ^= T[4][(V[29] & 0xFF)];
+        r ^= T[5][(V[21] & 0xFF)];
+        r ^= T[6][(V[13] & 0xFF)];
+        r ^= T[7][(V[ 5] & 0xFF)];
+        res[5] = r;
+
+        r = 0;
+        r ^= T[0][(V[62] & 0xFF)];
+        r ^= T[1][(V[54] & 0xFF)];
+        r ^= T[2][(V[46] & 0xFF)];
+        r ^= T[3][(V[38] & 0xFF)];
+        r ^= T[4][(V[30] & 0xFF)];
+        r ^= T[5][(V[22] & 0xFF)];
+        r ^= T[6][(V[14] & 0xFF)];
+        r ^= T[7][(V[ 6] & 0xFF)];
+        res[6] = r;
+
+        r = 0;
+        r ^= T[0][(V[63] & 0xFF)];
+        r ^= T[1][(V[55] & 0xFF)];
+        r ^= T[2][(V[47] & 0xFF)];
+        r ^= T[3][(V[39] & 0xFF)];
+        r ^= T[4][(V[31] & 0xFF)];
+        r ^= T[5][(V[23] & 0xFF)];
+        r ^= T[6][(V[15] & 0xFF)];
+        r ^= T[7][(V[ 7] & 0xFF)];
+        res[7] = r;
+
+        r = res[0];
+        V[7] = (byte)(r >> 56);
+        V[6] = (byte)(r >> 48);
+        V[5] = (byte)(r >> 40);
+        V[4] = (byte)(r >> 32);
+        V[3] = (byte)(r >> 24);
+        V[2] = (byte)(r >> 16);
+        V[1] = (byte)(r >>  8);
+        V[0] = (byte)(r      );
+
+        r = res[1];
+        V[15] = (byte)(r >> 56);
+        V[14] = (byte)(r >> 48);
+        V[13] = (byte)(r >> 40);
+        V[12] = (byte)(r >> 32);
+        V[11] = (byte)(r >> 24);
+        V[10] = (byte)(r >> 16);
+        V[ 9] = (byte)(r >>  8);
+        V[ 8] = (byte)(r      );
+
+        r = res[2];
+        V[23] = (byte)(r >> 56);
+        V[22] = (byte)(r >> 48);
+        V[21] = (byte)(r >> 40);
+        V[20] = (byte)(r >> 32);
+        V[19] = (byte)(r >> 24);
+        V[18] = (byte)(r >> 16);
+        V[17] = (byte)(r >>  8);
+        V[16] = (byte)(r      );
+
+        r = res[3];
+        V[31] = (byte)(r >> 56);
+        V[30] = (byte)(r >> 48);
+        V[29] = (byte)(r >> 40);
+        V[28] = (byte)(r >> 32);
+        V[27] = (byte)(r >> 24);
+        V[26] = (byte)(r >> 16);
+        V[25] = (byte)(r >>  8);
+        V[24] = (byte)(r      );
+
+        r = res[4];
+        V[39] = (byte)(r >> 56);
+        V[38] = (byte)(r >> 48);
+        V[37] = (byte)(r >> 40);
+        V[36] = (byte)(r >> 32);
+        V[35] = (byte)(r >> 24);
+        V[34] = (byte)(r >> 16);
+        V[33] = (byte)(r >>  8);
+        V[32] = (byte)(r      );
+
+        r = res[5];
+        V[47] = (byte)(r >> 56);
+        V[46] = (byte)(r >> 48);
+        V[45] = (byte)(r >> 40);
+        V[44] = (byte)(r >> 32);
+        V[43] = (byte)(r >> 24);
+        V[42] = (byte)(r >> 16);
+        V[41] = (byte)(r >>  8);
+        V[40] = (byte)(r      );
+
+        r = res[6];
+        V[55] = (byte)(r >> 56);
+        V[54] = (byte)(r >> 48);
+        V[53] = (byte)(r >> 40);
+        V[52] = (byte)(r >> 32);
+        V[51] = (byte)(r >> 24);
+        V[50] = (byte)(r >> 16);
+        V[49] = (byte)(r >>  8);
+        V[48] = (byte)(r      );
+
+        r = res[7];
+        V[63] = (byte)(r >> 56);
+        V[62] = (byte)(r >> 48);
+        V[61] = (byte)(r >> 40);
+        V[60] = (byte)(r >> 32);
+        V[59] = (byte)(r >> 24);
+        V[58] = (byte)(r >> 16);
+        V[57] = (byte)(r >>  8);
+        V[56] = (byte)(r      );
     }
 
-    private void xor512(byte[] inOut, byte[] arg) {
+    private void xor512(byte[] A, byte[] B) {
         for (int i = 0; i < 64; ++i) {
-            inOut[i] ^= arg[i];
+            A[i] ^= B[i];
         }
     }
 
@@ -131,7 +274,7 @@ public class GOSTDigest extends MessageDigestSpi {
         return h;
     }
 
-    private static void addMod512(byte[] A, int num) {
+    private void addMod512(byte[] A, int num) {
         int c;
         c = (A[63] & 0xFF) + ((byte)num & 0xFF);
         A[63] = (byte)c;
@@ -145,7 +288,7 @@ public class GOSTDigest extends MessageDigestSpi {
         }
     }
 
-    private static void addMod512(byte[] A, byte[] B) {
+    private void addMod512(byte[] A, byte[] B) {
         for (int c = 0, i = A.length - 1; i >= 0; --i) {
             c = (A[i] & 0xFF) + (B[i] & 0xFF) + (c >> 8);
             A[i] = (byte)c;

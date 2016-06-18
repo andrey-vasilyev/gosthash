@@ -251,13 +251,12 @@ public class GOSTDigest extends MessageDigestSpi {
 
         xor512(Ki[0], m);
         F(Ki[0]);
-        for (int i = 1; i < 13; ++i) {
-
+        for (int i = 1; i < 12; ++i) {
             xor512(Ki[i], Ki[i - 1]);
-            if (i != 12) {
-                F(Ki[i]);
-            }
+            F(Ki[i]);
         }
+        xor512(Ki[12], Ki[11]);
+
         return Ki[12];
     }
 
@@ -276,10 +275,10 @@ public class GOSTDigest extends MessageDigestSpi {
 
     private void addMod512(byte[] A, int num) {
         int c;
-        c = (A[63] & 0xFF) + ((byte)num & 0xFF);
+        c = (A[63] & 0xFF) + (num & 0xFF);
         A[63] = (byte)c;
 
-        c = (A[62] & 0xFF) + ((byte)(num >> 8) & 0xFF) + (c >> 8);
+        c = (A[62] & 0xFF) + ((num >> 8) & 0xFF) + (c >> 8);
         A[62] = (byte)c;
 
         for (int i = 61; (i >= 0) && (c > 0); --i) {
@@ -289,7 +288,7 @@ public class GOSTDigest extends MessageDigestSpi {
     }
 
     private void addMod512(byte[] A, byte[] B) {
-        for (int c = 0, i = A.length - 1; i >= 0; --i) {
+        for (int c = 0, i = 63; i >= 0; --i) {
             c = (A[i] & 0xFF) + (B[i] & 0xFF) + (c >> 8);
             A[i] = (byte)c;
         }

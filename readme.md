@@ -44,13 +44,13 @@ public class Main {
 To build and run [JMH](http://openjdk.java.net/projects/code-tools/jmh/) benchmark:
 
     gradle jmhJar
-    java -jar build/libs/gosthash-0.3-jmh.jar -wi 5 -i 5 -f 1 -jvmArgs '-server -XX:+AggressiveOpts'
+    java -jar build/libs/gosthash-0.3-jmh.jar -wi 5 -i 5 -f 1 -jvmArgs "-server -XX:+AggressiveOpts"
 
 Here are some results taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU and openjdk 1.8.0_91:
 
 | Unoptimized | Optimized | Optimized + Unrolled |
 | ----------- | --------- | -------------------- |
-|    0.101    |   1.259   |         1.704        |
+|    0.101    |   1.259   |         1.823        |
 
 The results are given in operations per second i.e. the number of times benchmark function is executed per second (more is better).
 

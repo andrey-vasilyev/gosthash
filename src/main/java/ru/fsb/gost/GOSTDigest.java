@@ -9,7 +9,6 @@ public class GOSTDigest extends MessageDigestSpi {
     private final byte[] IV;
     private final byte[] N = new byte[64];
     private final byte[] Sigma = new byte[64];
-    private final byte[][] Ki = new byte[13][64];
     private final ByteArrayOutputStream baosM = new ByteArrayOutputStream();
 
     GOSTDigest(byte[] IV) {
@@ -241,23 +240,20 @@ public class GOSTDigest extends MessageDigestSpi {
         }
     }
 
-    private byte[] E(byte[] K, byte[] m) {
-        System.arraycopy(K, 0, Ki[0], 0, 64);
-        for (int i = 1; i < 13; ++i) {
-            System.arraycopy(Ki[i - 1], 0, Ki[i], 0, 64);
-            xor512(Ki[i], C[i - 1]);
-            F(Ki[i]);
+    private void E(byte[] K, byte[] m) {
+        byte[] Ki = new byte[64];
+        System.arraycopy(K, 0, Ki, 0, 64);
+        xor512(K, m);
+        F(K);
+        for (int i = 0; i < 11; ++i) {
+            xor512(Ki, C[i]);
+            F(Ki);
+            xor512(K, Ki);
+            F(K);
         }
-
-        xor512(Ki[0], m);
-        F(Ki[0]);
-        for (int i = 1; i < 12; ++i) {
-            xor512(Ki[i], Ki[i - 1]);
-            F(Ki[i]);
-        }
-        xor512(Ki[12], Ki[11]);
-
-        return Ki[12];
+        xor512(Ki, C[11]);
+        F(Ki);
+        xor512(K, Ki);
     }
 
     private byte[] g_N(byte[] N, byte[] h, byte[] m) {
@@ -266,8 +262,8 @@ public class GOSTDigest extends MessageDigestSpi {
         xor512(h, N);
         F(h);
 
-        h = E(h, m);
-        xor512(h, tmp);
+        E(h, m);
+        xor512(h, tmp); 
         xor512(h, m);
 
         return h;

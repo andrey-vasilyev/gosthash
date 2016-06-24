@@ -50,7 +50,7 @@ Here are some results taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU and ope
 
 | Unoptimized | Optimized | Optimized + Unrolled |
 | ----------- | --------- | -------------------- |
-|    0.101    |   1.259   |         1.823        |
+|    0.101    |   1.259   |         1.903        |
 
 The results are given in operations per second i.e. the number of times benchmark function is executed per second (more is better).
 

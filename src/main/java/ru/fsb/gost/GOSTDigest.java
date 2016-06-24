@@ -7,8 +7,12 @@ import java.util.Arrays;
 public class GOSTDigest extends MessageDigestSpi {
 
     private final byte[] IV;
-    private final byte[] N = new byte[64];
+    private final byte[] N     = new byte[64];
     private final byte[] Sigma = new byte[64];
+    private final byte[] Ki    = new byte[64];
+    private final byte[] tmp   = new byte[64];
+    private final byte[] m     = new byte[64];
+    private final byte[] h     = new byte[64];
     private final ByteArrayOutputStream baosM = new ByteArrayOutputStream();
 
     GOSTDigest(byte[] IV) {
@@ -28,13 +32,12 @@ public class GOSTDigest extends MessageDigestSpi {
     @Override
     protected byte[] engineDigest() {
         byte[] M = baosM.toByteArray();
-        byte[] m = new byte[64];
-        byte[] h = Arrays.copyOf(IV, IV.length);
+        System.arraycopy(IV, 0, h, 0, 64);
 
         int lenM = M.length;
         while (lenM >= 64) {
             System.arraycopy(M, lenM - 64, m, 0, 64);
-            h = g_N(N, h, m);
+            g_N(h, N, m);
             addMod512(N, 512);
             addMod512(Sigma, m);
             lenM -= 64;
@@ -44,11 +47,11 @@ public class GOSTDigest extends MessageDigestSpi {
         m[63 - lenM] = (byte) (m[63 - lenM] | 0x01);
         System.arraycopy(M, 0, m, 64 - lenM, lenM);
 
-        h = g_N(N, h, m);
+        g_N(h, N, m);
         addMod512(N, lenM * 8);
         addMod512(Sigma, m);
-        h = g_N(Zero, h, N);
-        h = g_N(Zero, h, Sigma);
+        g_N(h, Zero, N);
+        g_N(h, Zero, Sigma);
 
         engineReset();
         return h;
@@ -241,7 +244,6 @@ public class GOSTDigest extends MessageDigestSpi {
     }
 
     private void E(byte[] K, byte[] m) {
-        byte[] Ki = new byte[64];
         System.arraycopy(K, 0, Ki, 0, 64);
         xor512(K, m);
         F(K);
@@ -256,17 +258,15 @@ public class GOSTDigest extends MessageDigestSpi {
         xor512(K, Ki);
     }
 
-    private byte[] g_N(byte[] N, byte[] h, byte[] m) {
-        byte[] tmp = Arrays.copyOf(h, h.length);
+    private void g_N(byte[] h, byte[] N, byte[] m) {
+        System.arraycopy(h, 0, tmp, 0, 64);
 
         xor512(h, N);
         F(h);
 
         E(h, m);
-        xor512(h, tmp); 
+        xor512(h, tmp);
         xor512(h, m);
-
-        return h;
     }
 
     private void addMod512(byte[] A, int num) {
@@ -290,7 +290,7 @@ public class GOSTDigest extends MessageDigestSpi {
         }
     }
 
-    private final byte[][] C = {{
+    private final static byte[][] C = {{
             (byte)0xb1, (byte)0x08, (byte)0x5b, (byte)0xda, (byte)0x1e, (byte)0xca, (byte)0xda, (byte)0xe9,
             (byte)0xeb, (byte)0xcb, (byte)0x2f, (byte)0x81, (byte)0xc0, (byte)0x65, (byte)0x7c, (byte)0x1f,
             (byte)0x2f, (byte)0x6a, (byte)0x76, (byte)0x43, (byte)0x2e, (byte)0x45, (byte)0xd0, (byte)0x16,
@@ -400,7 +400,7 @@ public class GOSTDigest extends MessageDigestSpi {
             (byte)0x48, (byte)0xbc, (byte)0x92, (byte)0x4a, (byte)0xf1, (byte)0x1b, (byte)0xd7, (byte)0x20}
     };
 
-    private final byte[] Zero = {
+    private final static byte[] Zero = {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -411,7 +411,7 @@ public class GOSTDigest extends MessageDigestSpi {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    private final long[][] T = {
+    private final static long[][] T = {
         {
             0xE6F87E5C5B711FD0L,0x258377800924FA16L,0xC849E07E852EA4A8L,0x5B4686A18F06C16AL,
             0x0B32E9A2D77B416EL,0xABDA37A467815C66L,0xF61796A81A686676L,0xF5DC0B706391954BL,

@@ -6,11 +6,6 @@ It provides new [java.security.Provider](http://docs.oracle.com/javase/8/docs/ap
 with "GOST3411-2012.512" and "GOST3411-2012.256" message digest functions for 512-bit and 256-bit version of GOST3411-2012
 respectively.
 
-At the moment there are some limitations:
-
-* Input data size is limited to 2Gb, as it is max that you can put into standard [MessageDigest](http://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html)
-* There is no way to input an array of bits of arbitrary size i.e. you can't get the digest of exactly 505 bits of information although it is allowed by the specification
-
 #Usage
 
 Here is a simple usage example to get 512-bit digest of "Hello, World!" string:
@@ -44,13 +39,13 @@ public class Main {
 To build and run [JMH](http://openjdk.java.net/projects/code-tools/jmh/) benchmark:
 
     gradle jmhJar
-    java -jar build/libs/gosthash-0.3-jmh.jar -wi 5 -i 5 -f 1 -jvmArgs "-server -XX:+AggressiveOpts"
+    java -jar build/libs/gosthash-0.3-jmh.jar -wi 5 -i 15 -f 1 -jvmArgs "-server -XX:+AggressiveOpts"
 
 Here are some results taken on Ubutnu 14.04 desktop with AMD FX-8320 CPU and openjdk 1.8.0_91:
 
 | Unoptimized | Optimized | Optimized + Unrolled |
 | ----------- | --------- | -------------------- |
-|    0.101    |   1.259   |         1.903        |
+|    0.101    |   1.259   |         1.963        |
 
 The results are given in operations per second i.e. the number of times benchmark function is executed per second (more is better).
 

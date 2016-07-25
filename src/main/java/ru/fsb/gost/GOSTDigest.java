@@ -1,6 +1,5 @@
 package ru.fsb.gost;
 
-import java.io.ByteArrayOutputStream;
 import java.security.MessageDigestSpi;
 import java.util.Arrays;
 
@@ -17,7 +16,7 @@ public class GOSTDigest extends MessageDigestSpi {
     private final byte[] tmp   = new byte[64];
     private final byte[] block = new byte[64];
 
-    private ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    private int bOff = 64;
 
     GOSTDigest(byte[] IV) {
         System.arraycopy(IV, 0, this.IV, 0, 64);
@@ -26,53 +25,50 @@ public class GOSTDigest extends MessageDigestSpi {
 
     @Override
     protected void engineUpdate(byte input) {
-        baos.write(input);
-        if (baos.size() == 64) {
-            reverse(baos.toByteArray(), block);
-
+        block[--bOff] = input;
+        if (bOff == 0) {
             g_N(h, N, block);
             addMod512(N, 512);
             addMod512(Sigma, block);
-
-            baos.reset();
+            bOff = 64;
         }
     }
 
     @Override
     protected void engineUpdate(byte[] input, int offset, int len) {
-        baos.write(input, offset, len);
+        while (bOff != 64 && len > 0) {
+            engineUpdate(input[offset++]);
+            len--;
+        }
 
-        int length = baos.size();
-        if (length >= 64) {
-            byte[] M = baos.toByteArray();
-            int i = 0;
-            while (length >= 64) {
-                System.arraycopy(M, i, tmp, 0, 64);
-                reverse(tmp, m);
-            g_N(h, N, m);
+        while (len >= 64) {
+            System.arraycopy(input, offset, tmp, 0, 64);
+            reverse(tmp, block);
+            g_N(h, N, block);
             addMod512(N, 512);
-            addMod512(Sigma, m);
+            addMod512(Sigma, block);
 
-                length -= 64;
-                i += 64;
+            len -= 64;
+            offset += 64;
             }
-            ByteArrayOutputStream newBaos = new ByteArrayOutputStream();
-            newBaos.write(M, i, length);
-            baos = newBaos;
+
+        while (len > 0) {
+            engineUpdate(input[offset++]);
+            len--;
         }
         }
 
     @Override
     protected byte[] engineDigest() {
-        byte[] M = new byte[baos.size()];
-        reverse(baos.toByteArray(), M);
-        int lenM = M.length;
+        int lenM = 64 - bOff;
 
         // At this point it is certain that lenM is smaller than 64
         Arrays.fill(m, 0, 64 - lenM, (byte)0);
         m[63 - lenM] = 1;
 
-        System.arraycopy(M, 0, m, 64 - lenM, lenM);
+        if (bOff != 64) {
+            System.arraycopy(block, bOff, m, 64 - lenM, lenM);
+        }
 
         g_N(h, N, m);
         addMod512(N, lenM * 8);
@@ -80,7 +76,10 @@ public class GOSTDigest extends MessageDigestSpi {
         g_N(h, Zero, N);
         g_N(h, Zero, Sigma);
 
-        byte[] result = Arrays.copyOf(h, 64);
+        reverse(h, tmp);
+        byte[] result = new byte[64];
+        System.arraycopy(tmp, 0, result, 0, 64);
+
         engineReset();
         return result;
     }
@@ -90,7 +89,7 @@ public class GOSTDigest extends MessageDigestSpi {
         Arrays.fill(N, (byte)0);
         Arrays.fill(Sigma, (byte)0);
         System.arraycopy(IV, 0, h, 0, 64);
-        baos.reset();
+        bOff = 64;
     }
 
     private void F(byte[] V) {

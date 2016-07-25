@@ -36,30 +36,30 @@ public class GOSTProviderTest {
     private final byte[] M3 = new byte[10 * 1024 * 1024];
 
     private final String A1_512 =
-            "486f64c1917879417fef082b3381a4e2" +
-            "11c324f074654c38823a7b76f830ad00" +
-            "fa1fbae42b1285c0352f227524bc9ab1" +
-            "6254288dd6863dccd5b9f54a1ad0541b";
+            "1b54d01a4af5b9d5cc3d86d68d285462" +
+            "b19abc2475222f35c085122be4ba1ffa" +
+            "00ad30f8767b3a82384c6574f024c311" +
+            "e2a481332b08ef7f41797891c1646f48";
 
     private final String A2_512 =
-            "28fbc9bada033b1460642bdcddb90c3f" +
-            "b3e56c497ccd0f62b8a2ad4935e85f03" +
-            "7613966de4ee00531ae60f3b5a47f8da" +
-            "e06915d5f2f194996fcabf2622e6881e";
+            "1e88e62226bfca6f9994f1f2d51569e0" +
+            "daf8475a3b0fe61a5300eee46d961376" +
+            "035fe83549ada2b8620fcd7c496ce5b3" +
+            "3f0cb9dddc2b6460143b03dabac9fb28";
 
     private final String A3_512 =
-            "2cf56208267093a284cbf8f5b3b8f222" +
-            "4fadb5acc8c5977151eb0d3f588803f2" +
-            "2e944c7caed24dbcb0d83fa19ff19120" +
-            "63673b4892e97e51f7188ea2800e0d15";
+            "150d0e80a28e18f7517ee992483b6763" +
+            "2091f19fa13fd8b0bc4dd2ae7c4c942e" +
+            "f20388583f0deb517197c5c8acb5ad4f" +
+            "22f2b8b3f5f8cb84a29370260862f52c";
 
     private final String A1_256 =
-            "00557be5e584fd52a449b16b0251d05d" +
-            "27f94ab76cbaa6da890b59d8ef1e159d";
+            "9d151eefd8590b89daa6ba6cb74af927" +
+            "5dd051026bb149a452fd84e5e57b5500";
 
     private final String A2_256 =
-            "508f7e553c06501d749a66fc28c6cac0" +
-            "b005746d97537fa85d9e40904efed29d";
+            "9dd2fe4e90409e5da87f53976d7405b0" +
+            "c0cac628fc669a741d50063c557e8f50";
 
 
     public GOSTProviderTest() {

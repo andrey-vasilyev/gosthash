@@ -21,6 +21,6 @@ public final class GOST3411_2012_256 extends GOSTDigest {
 
     @Override
     protected byte[] engineDigest() {
-        return Arrays.copyOf(super.engineDigest(), 32);
+        return Arrays.copyOfRange(super.engineDigest(), 32, 64);
     }
 }
